@@ -5,6 +5,7 @@ exports.getPosts = async (req, res) => {
     const posts = await Post.findAll();
 
     res.send({
+      status: "success",
       message: "Posts Successfully Retrieved",
       data: {
         posts,
@@ -29,12 +30,14 @@ exports.getPostsById = async (req, res) => {
     });
 
     if (!post) {
-      return res.send({
+      return res.status(400).send({
+        status: "failed",
         message: `Post with id ${id} Not Existed`,
       });
     }
 
     res.send({
+      status: "success",
       message: `Post with id ${id} Successfully Retrieved`,
       data: {
         post,
