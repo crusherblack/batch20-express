@@ -1,6 +1,11 @@
 const express = require("express");
 const router = express.Router();
 
+//middleware
+const { authenticated } = require("../middlewares/auth");
+const { isAdmin } = require("../middlewares/checkRole");
+const { uploadFile } = require("../middlewares/upload");
+
 const {
   getTodos,
   addTodo,
@@ -25,8 +30,12 @@ const {
 
 const { getBooks, getAuthors } = require("../controllers/authorBook");
 
-router.get("/todos", getTodos);
-router.post("/todo", addTodo);
+const { register, login } = require("../controllers/auth");
+
+const { addImage } = require("../controllers/upload");
+
+router.get("/todos", authenticated, isAdmin, getTodos);
+router.post("/todo", authenticated, addTodo);
 router.patch("/todo/:id", editTodo);
 router.delete("/todo/:id", deleteTodo);
 
@@ -47,5 +56,12 @@ router.get("/skills", getSkills);
 // relasi Many-To-Many || BelongsToMany & BelongsToMany
 router.get("/books", getBooks);
 router.get("/authors", getAuthors);
+
+// auth
+router.post("/register", register);
+router.post("/login", login);
+
+//testing upload
+router.post("/upload-gallery", uploadFile("imageFile", "videoFile"), addImage);
 
 module.exports = router;

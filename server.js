@@ -8,6 +8,7 @@ const router = require("./src/routes");
 
 // gunakan bodyParser JSON
 app.use(bodyParser.json());
+app.use("/uploads", express.static("uploads"));
 app.use("/api/v1", router);
 
 // defenisikan port disini
